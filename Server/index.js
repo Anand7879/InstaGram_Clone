@@ -9,7 +9,7 @@ let app  = express()
 app.use(cors())
 app.use(express.json())
 let Upload = require('./Upload')
-let User=    require('./UserSchema')
+let User=    require('./User')
 const auth = require("./Auth");
 mongoose.connect('mongodb://127.0.0.1:27017/insta').then(()=>{
     console.log("DB Connected...");
@@ -84,13 +84,15 @@ app.post("/login", async (req, res) => {
       })
     }
 
+     console.log("Plain Password:", passWord);
+     console.log("Hashed from DB:", userInfo.passWord);
     // Verify password
     let validPass = await bcrypt.compare(passWord, userInfo.passWord)
     
     if (validPass) {
         let token = jwt.sign({_id: userInfo._id, email: userInfo.email, role: userInfo.role }, "JHBFIUWBFIUWB");
         console.log(token,"tokennnnn");
-      return res.status(200).json({ 
+        return res.status(200).json({ 
         success: true, 
         message: "Login successful",
         token: token,
@@ -179,22 +181,23 @@ app.post('/reset-password/:token', async (req, res) => {
 
 app.post('/upload',auth,async (req,res) => {
   try{
+    const { userName, imgUrl, user } = req.body;
 
-    const userId = req.user._id;  
-    let {imgUrl} = req.body
-
-     if (!imgUrl) {
+     if (!userName || !imgUrl || !user) {
       return res.status(400).json({ msg: "Missing data" });
     }
     
     let uploaD = new Upload({
+        userName,
         imgUrl,
-        user: userId,      
+        user,      
         likedBy: []
     })
     
     await uploaD.save()
     return res.send("URL Uploaded Successfully")
+    console.log(ImgUrl, "url saved");
+
   } catch (err) {
     console.error("Error during upload:", err.message);
    return res.status(500).json({ msg: "Error during upload", error: err.message });
@@ -206,27 +209,35 @@ app.post("/like/:id", auth, async (req, res) =>{
   try {
     const postId = req.params.id;
     const userId = req.user?._id;
+
+     if (!userId) {
+      return res.status(400).json({ success: false, message: "User not authenticated" });
+    }
+
+     // Find post
     const post = await Upload.findById(postId);
 
-    if(!post){
-      return res.status(404).json({ success: false, message: "Post not found"});
+    if (!post) {
+      return res.status(404).json({ success: false, message: "Post not found" });
     }
-    post.likedBy = post.likedBy.filter(id => id != null)
 
-      let alreadyLiked = await Upload.likedBy.includes(userId)
+    // Clean NULL values from likedBy (runtime cleanup)
+    post.likedBy = post.likedBy.filter(id => id !== null);
+
+      let alreadyLiked = await post.likedBy.includes(userId)
 
       if (alreadyLiked) {
-      Upload.likedBy = Upload.likedBy.filter(
+      post.likedBy = post.likedBy.filter(
         id => id && id.toString() !== userId.toString()
       );
 
-      Upload.likeCount = Math.max(0,Upload.likeCount - 1);
-      await Upload.save();
+      post.likeCount = Math.max(0,post.likeCount - 1);
+      await post.save();
 
       return res.json({
         success: true,
         message: "Like removed",
-        likeCount: Upload.likeCount
+        likeCount: post.likeCount
       });
 
     }
