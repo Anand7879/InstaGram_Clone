@@ -18,6 +18,14 @@ let userSchema= mongoose.Schema({
         enum:['user','admin','instructor'],
         default:'user'                                                  
     },
+    following:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",   // reference to user model
+    }],
+    followers:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",   // reference to user model
+    }],
     resetToken: String,
     resetTokenExpiry: Date,
     

@@ -11,6 +11,7 @@ app.use(express.json())
 let Upload = require('./Upload')
 let User=    require('./User')
 const auth = require("./Auth");
+let Comment = require('./Comment')
 mongoose.connect('mongodb://127.0.0.1:27017/insta').then(()=>{
     console.log("DB Connected...");
     
@@ -259,6 +260,111 @@ app.post("/like/:id", auth, async (req, res) =>{
   }
 });
 
+app.post("/follow/:id",auth,async(req,res)=>{
+  let targetUserId = req.params.id;
+  let currentUserId = req.user._id;
+
+   console.log(req.user,"hehh");
+  if(targetUserId==currentUserId){
+    res.json({msg:"nashe mat karo...."})
+
+  }
+
+  let targetUser = await User.findById(targetUserId)
+  let currentUser = await User.findById(currentUserId)
+
+  // Unfollow
+  if(!currentUser || !targetUser){
+    res.send("User not found")
+  }
+  
+  let alreadyFollow = currentUser.following.includes(targetUserId)
+  if(alreadyFollow){
+    currentUser.following = currentUser.following.filter(
+      id => id.toString() !== targetUserId.toString()
+    )
+
+    targetUser.followers = targetUser.followers.filter(
+      id => id.toString() !== currentUserId.toString()
+    )
+    await currentUser.save()
+    await targetUser.save()
+
+   return res.json({
+      success: true,
+      msg: "Unfollowed successfully"
+    });
+  }
+
+
+   // Follow
+   currentUser.following.push(targetUserId)
+   targetUser.followers.push(currentUserId)
+
+   await currentUser.save()
+   await targetUser.save()
+   
+   res.json({msg:"followed succe......"})
+
+
+})
+
+
+app.post("/comment/:id", auth, async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const userId = req.user._id;
+    const { text } = req.body;
+
+    if (!text || text.trim() === '') {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Comment text is required" 
+      });
+    }
+
+    // Verify post exists
+    const post = await Upload.findById(postId);
+    if (!post) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "Post not found" 
+      });
+    }
+
+    // Get user info
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "User not found" 
+      });
+    }
+
+    // Create new comment
+    const newComment = new Comment({
+      postId,
+      userId,
+      userName: user.userName,
+      text: text.trim()
+    });
+
+    await newComment.save();
+
+    return res.status(201).json({
+      success: true,
+      message: "Comment added successfully",
+      comment: newComment
+    });
+
+  } catch (err) {
+    console.error("COMMENT API ERROR:", err);
+    res.status(500).json({ 
+      success: false, 
+      message: "Server error" 
+    });
+  }
+});
 
 app.listen(3000,()=>{
     console.log("Server running on port 3000");

@@ -3,6 +3,7 @@ import SignUp from './SignUp'
 import LoginInsta from './LoginInsta'
 import Forgot from './Forgot'
 import ResetPassword from './ResetPassword'
+import Home from './Home'
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import Upload from './Upload'
@@ -11,6 +12,7 @@ const App = () => {
     <div>
       <Routes>
         <Route   path='/' element={<LoginInsta/>}/>
+        <Route path='/home' element={<Home/>}/>
         {/* <Route   path='/' element={<Upload/>}/> */}
         <Route   path='/signup' element={<SignUp/>}/>
         <Route   path='/forgot-password' element={<Forgot/>}/>
