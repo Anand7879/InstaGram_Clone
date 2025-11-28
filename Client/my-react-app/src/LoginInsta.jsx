@@ -28,6 +28,7 @@ const [errorMsg, setErrorMsg] = useState("");
       console.log("SERVER RESPONSE →", res.data);
 
       if (res.data.success || res.status === 200) {
+        
         // Save token and user to localStorage
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));

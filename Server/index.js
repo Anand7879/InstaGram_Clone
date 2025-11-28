@@ -11,7 +11,8 @@ app.use(express.json())
 let Upload = require('./Upload')
 let User=    require('./User')
 const auth = require("./Auth");
-let Comment = require('./Comment')
+let Comment = require('./Comment');
+const { log } = require('console');
 mongoose.connect('mongodb://127.0.0.1:27017/insta').then(()=>{
     console.log("DB Connected...");
     
@@ -266,7 +267,7 @@ app.post("/follow/:id",auth,async(req,res)=>{
 
    console.log(req.user,"hehh");
   if(targetUserId==currentUserId){
-    res.json({msg:"nashe mat karo...."})
+   return res.json({msg:"nashe mat karo...."})
 
   }
 
@@ -365,6 +366,24 @@ app.post("/comment/:id", auth, async (req, res) => {
     });
   }
 });
+
+
+app.post("/search", async(req,res) =>{
+  let query = req.query.q
+  if(!query){
+    return res.send("query not found")
+  }
+
+  let isMatch = await User.find({
+    $or:[
+      {userName:{$regex:query,$options:"i"}},
+      {email:{$regex:query,$options:"i"}}
+    ]
+  }).limit(2)
+  res.send({msg:isMatch})
+  console.log(isMatch);
+  
+})
 
 app.listen(3000,()=>{
     console.log("Server running on port 3000");
