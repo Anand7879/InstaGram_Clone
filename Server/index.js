@@ -368,20 +368,61 @@ app.post("/comment/:id", auth, async (req, res) => {
 });
 
 
+app.delete("/comment/:id",auth,async(req,res) => {
+
+  try{
+    const commentId = req.params.id;
+    const userId = req.user._id;
+    
+    const comment = await Comment.findById(commentId);
+    
+    if (!comment) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "Comment not found" 
+      });
+    }
+    
+    if(comment.userId.toString() !== userId.toString()){
+      return res.status(404).json({ 
+        success: false, 
+        message: "you can only delete your own comments" 
+      })
+
+    }
+     await Comment.findByIdAndDelete(commentId)
+
+    return res.json({ 
+        success: true, 
+        message: "Comment Deleted Successfully" 
+      });
+ }catch{
+    console.error("DELETE COMMENT ERROR:");
+    res.status(500).json({ 
+      success: false, 
+      message: "Server error" 
+    });
+  }
+})
+
 app.post("/search", async(req,res) =>{
   let query = req.query.q
   if(!query){
     return res.send("query not found")
   }
 
-  let isMatch = await User.find({
-    $or:[
-      {userName:{$regex:query,$options:"i"}},
-      {email:{$regex:query,$options:"i"}}
+  let isMatch = await User.find(
+  {
+    $or: [
+      { userName: { $regex: query, $options: "i" } },
+      { email: { $regex: query, $options: "i" } }
     ]
-  }).limit(2)
-  res.send({msg:isMatch})
-  console.log(isMatch);
+  },
+  { passWord: 0 }   // ← hide password
+).limit(2);
+
+res.send({ msg: isMatch });
+console.log(isMatch)
   
 })
 
@@ -389,3 +430,4 @@ app.listen(3000,()=>{
     console.log("Server running on port 3000");
     
 })
+
