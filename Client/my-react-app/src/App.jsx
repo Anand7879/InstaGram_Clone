@@ -13,7 +13,7 @@ const App = () => {
       <Routes>
         <Route   path='/' element={<LoginInsta/>}/>
         <Route path='/home' element={<Home/>}/>
-        {/* <Route   path='/' element={<Upload/>}/> */}
+        <Route   path='/upload' element={<Upload/>}/>
         <Route   path='/signup' element={<SignUp/>}/>
         <Route   path='/forgot-password' element={<Forgot/>}/>
         <Route   path='/reset/:token' element={<ResetPassword/>}/>

@@ -34,7 +34,27 @@ const handleFileChange = (e) => {
       const imageUrl = `${supabaseUrl}/storage/v1/object/public/Insta/insta_images/${Img.name}`;
       console.log("Image URL:", imageUrl);
 
-      let res = axios.post("http://localhost:3000/upload",imageUrl)
+       // 3️⃣ Get token and user from localStorage
+      const token = localStorage.getItem('token');
+      const userData = JSON.parse(localStorage.getItem('user')); // Get user data
+
+      console.log('Token:', token);
+      console.log('User data:', userData);
+
+      let res = await axios.post(
+        "http://localhost:3000/upload",
+        {
+          userName: userData.userName, 
+          imgUrl: imageUrl, 
+          user: userData._id
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
       alert("✅ Image uploaded and saved successfully!");
       console.log(res.data);
       

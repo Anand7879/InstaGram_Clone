@@ -426,6 +426,30 @@ console.log(isMatch)
   
 })
 
+
+// Add this after your other routes in index.js
+app.get('/posts', auth, async (req, res) => {
+  try {
+    const posts = await Upload.find()
+      .populate('user', 'userName')
+      .sort({ createdAt: -1 })
+      .lean();
+    
+    const userId = req.user._id;
+    
+    // Add isLiked flag for each post
+    const postsWithLikeStatus = posts.map(post => ({
+      ...post,
+      isLiked: post.likedBy.some(id => id.toString() === userId.toString())
+    }));
+    
+    res.json(postsWithLikeStatus);
+  } catch (err) {
+    console.error('Error fetching posts:', err);
+    res.status(500).json({ message: 'Error fetching posts' });
+  }
+});
+
 app.listen(3000,()=>{
     console.log("Server running on port 3000");
     
