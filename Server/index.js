@@ -307,9 +307,7 @@ app.post("/follow/:id",auth,async(req,res)=>{
    
    res.json({msg:"followed succe......"})
 
-
 })
-
 
 app.post("/comment/:id", auth, async (req, res) => {
   try {
@@ -425,6 +423,8 @@ res.send({ msg: isMatch });
 console.log(isMatch)
   
 })
+
+
 
 app.listen(3000,()=>{
     console.log("Server running on port 3000");
