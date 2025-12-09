@@ -197,14 +197,27 @@ app.post('/upload',auth,async (req,res) => {
     })
     
     await uploaD.save()
+    console.log(imgUrl, "url saved");
     return res.send("URL Uploaded Successfully")
-    console.log(ImgUrl, "url saved");
 
   } catch (err) {
     console.error("Error during upload:", err.message);
    return res.status(500).json({ msg: "Error during upload", error: err.message });
   }
   })
+
+app.get('/posts', auth, async (req, res) => {
+  try {
+    let posts = await Upload.find()
+      .populate("user", "userName") 
+      .sort({ createdAt: -1 });
+
+    res.json(posts);
+  } catch (err) {
+    console.error("Error fetching posts:", err);
+    res.status(500).json({ msg: "Error fetching posts", error: err.message });
+  }
+});
 
 
 app.post("/like/:id", auth, async (req, res) =>{
