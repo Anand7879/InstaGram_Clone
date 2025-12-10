@@ -693,11 +693,12 @@ nav {
   object-fit: cover;
 }
 .post-actions {
+  padding: 10px 12px;
   display: flex;
-  align-items: center;
-  padding: 10px 15px;
-  gap: 15px;
-} 
+  flex-direction: column;   
+  gap: 6px;
+}
+
 .like-button {
   background: none;
   border: none;
@@ -1009,3 +1010,18 @@ stroke: #ff3040;
   color: #ccc;
 }
 
+.post-actions {
+  padding: 10px 12px;
+}
+
+.action-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 6px;
+}
+
+.like-count {
+  color: #fff;
+  font-weight: 500;
+  font-size: 14px;
+}

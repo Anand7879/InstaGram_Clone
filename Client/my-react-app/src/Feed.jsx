@@ -5,9 +5,7 @@ const Feed = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // which post is open in the big popup (null = none)
   const [selectedPost, setSelectedPost] = useState(null);
-
   const [commentText, setCommentText] = useState("");
 
   useEffect(() => {
@@ -47,7 +45,6 @@ const Feed = () => {
 
       const data = await res.json();
 
-      
       setPosts((prev) =>
         prev.map((p) =>
           p._id === postId
@@ -78,7 +75,7 @@ const Feed = () => {
     if (!commentText.trim()) return;
 
     const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user")); // current user info
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const res = await fetch(`http://localhost:3000/comment/${postId}`, {
       method: "POST",
@@ -89,9 +86,8 @@ const Feed = () => {
       body: JSON.stringify({ text: commentText }),
     });
 
-    await res.json(); 
+    await res.json();
 
-   
     setPosts((prev) =>
       prev.map((p) =>
         p._id === postId
@@ -112,14 +108,12 @@ const Feed = () => {
     setCommentText("");
   };
 
-
   if (loading) return <div className="feed">Loading...</div>;
 
   const modalPost =
     selectedPost &&
     (posts.find((p) => p._id === selectedPost._id) || selectedPost);
 
-  
   return (
     <div className="feed">
       <div className="feed-inner">
@@ -138,43 +132,38 @@ const Feed = () => {
               <img src={post.imgUrl} alt="uploaded" />
             </div>
 
-            
+            {/* UPDATED ACTIONS AREA */}
             <div className="post-actions">
-              {/* LIKE BUTTON */}
-              <button
-                className={`like-button ${post.isLiked ? "liked" : ""}`}
-                onClick={() => handleLike(post._id)}
-              >
-                <Heart
-                  size={28}
-                  className={post.isLiked ? "heart-icon liked" : "heart-icon"}
-                />
-              </button>
+              <div className="action-row">
+                <button
+                  className={`like-button ${post.isLiked ? "liked" : ""}`}
+                  onClick={() => handleLike(post._id)}
+                >
+                  <Heart
+                    size={28}
+                    className={post.isLiked ? "heart-icon liked" : "heart-icon"}
+                  />
+                </button>
 
-              {/* COMMENT BUTTON – opens modal */}
-              <button
-                className="comment-button"
-                onClick={() => openCommentsModal(post)}
-              >
-                <MessageCircle size={28} className="comment-icon" />
-              </button>
+                <button
+                  className="comment-button"
+                  onClick={() => openCommentsModal(post)}
+                >
+                  <MessageCircle size={28} className="comment-icon" />
+                </button>
+              </div>
 
-              <span className="like-count">{post.likeCount || 0} likes</span>
+              {/* LIKE COUNT UNDER ICONS */}
+              <div className="like-count">{post.likeCount || 0} likes</div>
             </div>
           </article>
         ))}
       </div>
 
+      {/* ==================== MODAL ==================== */}
       {modalPost && (
-        <div
-          className="post-modal-backdrop"
-          onClick={closeCommentsModal} 
-        >
-          <div
-            className="post-modal"
-            onClick={(e) => e.stopPropagation()} 
-          >
-            
+        <div className="post-modal-backdrop" onClick={closeCommentsModal}>
+          <div className="post-modal" onClick={(e) => e.stopPropagation()}>
             <button className="modal-close" onClick={closeCommentsModal}>
               <X size={22} />
             </button>
@@ -184,7 +173,7 @@ const Feed = () => {
             </div>
 
             <div className="post-modal-side">
-             
+              {/* HEADER */}
               <div className="modal-header">
                 <div className="avatar">
                   {modalPost.userName?.[0]?.toUpperCase() || "U"}
@@ -192,6 +181,7 @@ const Feed = () => {
                 <span className="username">{modalPost.userName}</span>
               </div>
 
+              {/* COMMENTS */}
               <div className="modal-comments">
                 {modalPost.comments?.length > 0 ? (
                   modalPost.comments.map((c, index) => (
@@ -204,8 +194,8 @@ const Feed = () => {
                 )}
               </div>
 
+              {/* FOOTER */}
               <div className="modal-footer">
-                {/* actions row */}
                 <div className="modal-actions-row">
                   <button
                     className={`like-button ${
@@ -238,7 +228,6 @@ const Feed = () => {
                   {modalPost.likeCount || 0} likes
                 </span>
 
-                {/* ADD COMMENT INPUT */}
                 <div className="add-comment modal-add-comment">
                   <input
                     type="text"
