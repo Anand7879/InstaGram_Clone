@@ -206,16 +206,41 @@ app.post('/upload',auth,async (req,res) => {
   }
   })
 
-app.get('/posts', auth, async (req, res) => {
+app.get("/posts", auth, async (req, res) => {
   try {
-    let posts = await Upload.find()
-      .populate("user", "userName") 
-      .sort({ createdAt: -1 });
+    const userId = req.user._id.toString(); // logged-in user ID
 
-    res.json(posts);
+    let posts = await Upload.find()
+      .populate("user", "userName")
+      .sort({ createdAt: -1 })
+      .lean(); // returns plain JS objects
+
+    const postsWithDetails = await Promise.all(
+      posts.map(async (post) => {
+        // fetch all comments
+        const comments = await Comment.find({ postId: post._id })
+          .sort({ createdAt: 1 })
+          .lean();
+
+        // FIX: convert likedBy elements to strings
+        const likedBy = (post.likedBy || []).map(id => id?.toString());
+
+        // FIX: check if current user liked the post
+        const isLiked = likedBy.includes(userId);
+
+        return {
+          ...post,
+          comments,
+          isLiked  // ⭐⭐ THIS FIXES YOUR HEART ICON
+        };
+      })
+    );
+
+    res.json(postsWithDetails);
+
   } catch (err) {
     console.error("Error fetching posts:", err);
-    res.status(500).json({ msg: "Error fetching posts", error: err.message });
+    res.status(500).json({ msg: "Error fetching posts" });
   }
 });
 

@@ -692,3 +692,320 @@ nav {
   display: block;
   object-fit: cover;
 }
+.post-actions {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  gap: 15px;
+} 
+.like-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+.like-button .heart-icon {
+  stroke: #fff;             
+  fill: transparent;        
+  transition: all 0.2s ease;
+}
+.like-button .heart-icon.liked {
+stroke: #ff3040;          
+  fill: #ff3040;       
+  transform: scale(1.25); 
+}
+.like-count {
+  color: #fff;
+  font-size: 14px;
+}
+.post-likes {
+  font-weight: 600;
+  padding: 0 15px;
+  margin-top: -5px;
+  color: #fff;
+}
+.post-caption {
+  padding: 10px 15px;
+  color: #fff;
+}
+.post-caption .post-username {
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.comment-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.comment-icon {
+  color: #fff;
+  transition: 0.2s;
+}
+
+.comment-icon:hover {
+  transform: scale(1.2);
+}
+
+.comments-section {
+  padding: 10px 14px;
+  border-top: 1px solid #222;
+  color: #fff;
+}
+
+.comments-list {
+  margin-bottom: 10px;
+}
+
+.comment {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.add-comment {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.add-comment input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #444;
+  color: #fff;
+  padding: 6px;
+}
+
+.add-comment button {
+  background: none;
+  border: none;
+  color: #0095f6;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+.post-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; 
+}
+
+
+.post-modal {
+  background: #000;
+  width: min(950px, 95vw);
+  height: min(600px, 90vh);
+  display: flex;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.post-modal-image {
+  flex: 1.2;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-modal-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-modal-side {
+  flex: 1;
+  background: #111;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid #262626;
+}
+
+.modal-comments {
+  flex: 1;
+  padding: 10px 16px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.modal-comment {
+  margin-bottom: 8px;
+}
+
+.modal-footer {
+  border-top: 1px solid #262626;
+  padding: 8px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.like-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.heart-icon {
+  stroke: #fff;
+  fill: transparent;
+  transition: all 0.2s ease;
+}
+
+.heart-icon.liked {
+  stroke: #ff3040;
+  fill: #ff3040;
+  transform: scale(1.25);
+}
+
+.comment-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.comment-icon {
+  color: #fff;
+  transition: transform 0.2s ease;
+}
+
+.comment-button:hover .comment-icon {
+  transform: scale(1.15);
+}
+
+.like-count {
+  font-size: 14px;
+  color: #fff;
+}
+
+.modal-add-comment {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.modal-add-comment input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #444;
+  color: #fff;
+  padding: 6px 0;
+  outline: none;
+}
+
+.modal-add-comment button {
+  background: none;
+  border: none;
+  color: #0095f6;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.no-comments {
+  color: #aaa;
+}
+
+.modal-comment {
+  color: #fff;          /* <-- make comment text visible */
+  font-size: 14px;
+}
+
+.modal-comments {
+  color: #fff;          /* all comments inside list become white */
+}
+
+.no-comments {
+  color: #aaa;
+}
+
+.modal-header .username {
+  color: #fff;
+}
+
+
+/* === OVERLAY SEARCH PANEL (INSTAGRAM STYLE) === */
+.search-panel {
+  width: 350px;
+  height: 100vh;
+  background-color: #111;
+  border-right: 1px solid #222;
+  
+  /* overlay */
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  /* START HIDDEN */
+  transform: translateX(-370px);
+  transition: transform 0.35s ease-in-out;
+
+  z-index: 9999; /* appears over feed */
+  padding: 20px;
+}
+
+.search-panel.open {
+  transform: translateX(0);
+}
+
+/* Header */
+.search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  border-radius: 10px;
+  background: #222;
+  border: none;
+  outline: none;
+  color: #fff;
+}
+
+.recent-section {
+  margin-top: 20px;
+  color: #ccc;
+}
+
