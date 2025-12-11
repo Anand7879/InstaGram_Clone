@@ -1,4 +1,3 @@
-// HomePage.jsx
 import {
   Home,
   Search,
@@ -15,19 +14,21 @@ import {
 
 import React, { useState } from "react";
 import Feed from "./Feed";
+import Profile from "./Profile";   
 
 const HomePage = () => {
   const [showSearch, setShowSearch] = useState(false);
+  const [activePage, setActivePage] = useState("home");  
 
   const navItems = [
-    { icon: Home, label: "Home", onClick: () => setShowSearch(false) },
+    { icon: Home, label: "Home", onClick: () => setActivePage("home") },
     { icon: Search, label: "Search", onClick: () => setShowSearch(true) },
     { icon: Compass, label: "Explore" },
     { icon: PlaySquare, label: "Reels" },
     { icon: Send, label: "Messages" },
     { icon: Heart, label: "Notifications" },
     { icon: PlusSquare, label: "Create" },
-    { icon: User, label: "Profile" }
+    { icon: User, label: "Profile", onClick: () => setActivePage("profile") }  // ⬅️ PROFILE BUTTON
   ];
 
   const bottomItems = [
@@ -37,6 +38,7 @@ const HomePage = () => {
 
   return (
     <div className="home-container">
+      
       {/* LEFT SIDEBAR */}
       <div className="sidebar">
         <div className="logo">
@@ -68,7 +70,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* SEARCH PANEL OVERLAY (NO SHIFTING) */}
+      {/* SEARCH OVERLAY */}
       <div className={`search-panel ${showSearch ? "open" : ""}`}>
         <div className="search-header">
           <h3>Search</h3>
@@ -84,9 +86,9 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* MAIN FEED (NOT SHIFTING) */}
       <div className="main-content">
-        <Feed />
+        {activePage === "home" && <Feed />}
+        {activePage === "profile" && <Profile />} 
       </div>
     </div>
   );

@@ -1025,3 +1025,185 @@ stroke: #ff3040;
   font-weight: 500;
   font-size: 14px;
 }
+
+/* ===== PROFILE PAGE MAIN WRAPPER ===== */
+.profile-page {
+  background: #000;
+  min-height: 100vh;
+  color: #fff;
+  display: flex;
+}
+
+/* Shift main content (because sidebar is fixed at 250px) */
+.profile-content {
+  margin-left: 245px;
+  padding: 40px 60px;
+  width: 100%;
+}
+
+/* ===== TOP PROFILE SECTION ===== */
+.profile-top {
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+/* Profile Picture Border Gradient */
+.profile-photo-wrapper {
+  padding: 3px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #feda75, #d62976, #962fbf);
+}
+
+.profile-photo {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: #000;
+  padding: 3px;
+  object-fit: cover;
+}
+
+/* Username + Edit Button Row */
+.profile-username-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.profile-username {
+  font-size: 28px;
+  font-weight: 300;
+}
+
+.edit-btn {
+  background: #4583f8;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background: #4a07f2;
+}
+
+/* Stats Row */
+.profile-stats {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.profile-stats span {
+  font-weight: 600;
+}
+
+/* Bio Section */
+.profile-bio-name {
+  font-weight: 600;
+}
+
+.profile-bio-email {
+  color: #ccc;
+  margin-top: 2px;
+}
+
+.profile-bio-text {
+  color: #999;
+  margin-top: 4px;
+}
+
+/* ===== TOP BORDER LINE ===== */
+.profile-divider {
+  border-top: 1px solid #262626;
+  margin-top: 20px;
+}
+
+/* ===== TABS ===== */
+.profile-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 20px 0 10px;
+  /* color: #888; */
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.profile-tab-active {
+  /* color: #fff; */
+  /* border-top: 1px solid #fff; */
+  padding-top: 8px;
+}
+
+/* ===== POSTS GRID ===== */
+.profile-post-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  margin-top: 16px;
+}
+
+.profile-post {
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-post img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+}
+
+/* Hover Overlay */
+.profile-post:hover .post-overlay {
+  opacity: 1;
+}
+
+.post-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  opacity: 0;
+  transition: 0.25s ease;
+  font-size: 18px;
+}
+
+.post-overlay span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-content {
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  .profile-top {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .profile-username-section {
+    justify-content: center;
+  }
+
+  .profile-stats {
+    justify-content: center;
+    gap: 25px;
+  }
+}

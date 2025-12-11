@@ -10,7 +10,6 @@ import Upload from './Upload'
 const App = () => {
   return (
     <div>
-      {/* <Home/> */}
       <Routes>
         <Route   path='/' element={<LoginInsta/>}/>
         <Route path='/home' element={<Home/>}/>

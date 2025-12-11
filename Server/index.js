@@ -280,7 +280,7 @@ app.post("/like/:id", auth, async (req, res) =>{
         likeCount: post.likeCount
       });
 
-    }
+    }   
 
      // 🟢 IF NOT LIKED → LIKE
     post.likedBy.push(userId);
@@ -461,6 +461,31 @@ res.send({ msg: isMatch });
 console.log(isMatch)
   
 })
+
+app.get("/me", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-passWord");
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json(user);
+
+  } catch (e) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+app.get("/user-posts/:id", auth, async (req, res) => {
+  try {
+    const posts = await Upload.find({ user: req.params.id })
+      .sort({ createdAt: -1 });
+
+    res.json(posts);
+  } catch (e) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 
 
