@@ -697,13 +697,11 @@ nav {
   aspect-ratio: 1 / 1;
   max-height: none;
 }
-
 .post-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;       
 }
-
 .post-actions {
   padding: 10px 12px;
   display: flex;
