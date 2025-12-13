@@ -14,21 +14,47 @@ import {
 
 import React, { useState } from "react";
 import Feed from "./Feed";
-import Profile from "./Profile";   
+import Profile from "./Profile";
+import SearchUserRow from "./SearchUserRow"; // ⬅️ IMPORTANT
 
 const HomePage = () => {
   const [showSearch, setShowSearch] = useState(false);
-  const [activePage, setActivePage] = useState("home");  
+  const [activePage, setActivePage] = useState("home");
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [recentSearches, setRecentSearches] = useState(
+    JSON.parse(localStorage.getItem("recentSearches")) || []
+  );
+
+  // ---------------- NAV ITEMS ----------------
   const navItems = [
-    { icon: Home, label: "Home", onClick: () => setActivePage("home") },
-    { icon: Search, label: "Search", onClick: () => setShowSearch(true) },
+    {
+      icon: Home,
+      label: "Home",
+      onClick: () => {
+        setActivePage("home");
+        setShowSearch(false);
+      }
+    },
+    {
+      icon: Search,
+      label: "Search",
+      onClick: () => setShowSearch(true)
+    },
     { icon: Compass, label: "Explore" },
     { icon: PlaySquare, label: "Reels" },
     { icon: Send, label: "Messages" },
     { icon: Heart, label: "Notifications" },
     { icon: PlusSquare, label: "Create" },
-    { icon: User, label: "Profile", onClick: () => setActivePage("profile") }  // ⬅️ PROFILE BUTTON
+    {
+      icon: User,
+      label: "Profile",
+      onClick: () => {
+        setActivePage("profile");
+        setShowSearch(false);
+      }
+    }
   ];
 
   const bottomItems = [
@@ -36,10 +62,46 @@ const HomePage = () => {
     { icon: Grid3x3, label: "More" }
   ];
 
+  // ---------------- SEARCH HANDLER ----------------
+  const handleSearch = async (value) => {
+    setSearchQuery(value);
+
+    if (!value.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(
+      `http://localhost:3000/search?q=${value}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+    setSearchResults(data);
+  };
+
+  // ---------------- SAVE RECENT ----------------
+  const saveRecent = (user) => {
+    const updated = [
+      user,
+      ...recentSearches.filter((u) => u._id !== user._id),
+    ].slice(0, 5);
+
+    setRecentSearches(updated);
+    localStorage.setItem("recentSearches", JSON.stringify(updated));
+  };
+
+  // ---------------- RENDER ----------------
   return (
     <div className="home-container">
-      
-      {/* LEFT SIDEBAR */}
+
+      {/* ========== SIDEBAR ========== */}
       <div className="sidebar">
         <div className="logo">
           <h2>Instagram</h2>
@@ -51,7 +113,7 @@ const HomePage = () => {
               <li
                 key={index}
                 className="nav-item"
-                onClick={item.onClick ? item.onClick : undefined}
+                onClick={item.onClick}
               >
                 <item.icon size={24} />
                 <span>{item.label}</span>
@@ -70,7 +132,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* SEARCH OVERLAY */}
+      {/* ========== SEARCH OVERLAY ========== */}
       <div className={`search-panel ${showSearch ? "open" : ""}`}>
         <div className="search-header">
           <h3>Search</h3>
@@ -79,16 +141,40 @@ const HomePage = () => {
           </button>
         </div>
 
-        <input type="text" className="search-input" placeholder="Search" />
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search"
+          value={searchQuery}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
 
-        <div className="recent-section">
-          <p>Recent</p>
+        <div className="search-results">
+          {/* RECENT */}
+          {searchQuery === "" && recentSearches.length > 0 && (
+            <>
+              <p className="recent-title">Recent</p>
+              {recentSearches.map((u) => (
+                <SearchUserRow key={u._id} user={u} />
+              ))}
+            </>
+          )}
+
+          {/* SEARCH RESULTS */}
+          {searchResults.map((user) => (
+            <SearchUserRow
+              key={user._id}
+              user={user}
+              onClick={() => saveRecent(user)}
+            />
+          ))}
         </div>
       </div>
 
+      {/* ========== MAIN CONTENT ========== */}
       <div className="main-content">
         {activePage === "home" && <Feed />}
-        {activePage === "profile" && <Profile />} 
+        {activePage === "profile" && <Profile />}
       </div>
     </div>
   );

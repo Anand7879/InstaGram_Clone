@@ -486,7 +486,32 @@ app.get("/user-posts/:id", auth, async (req, res) => {
   }
 });
 
+app.get("/search", auth, async (req, res) => {
+  try {
+    const query = req.query.q;
+    const currentUserId = req.user._id;
 
+    if (!query) return res.json([]);
+
+    const users = await User.find({
+      userName: { $regex: query, $options: "i" },
+      _id: { $ne: currentUserId } // exclude self
+    })
+      .limit(7)
+      .select("userName followers");
+
+    const formatted = users.map(u => ({
+      _id: u._id,
+      userName: u.userName,
+      isFollowing: u.followers.includes(currentUserId),
+      followersCount: u.followers.length
+    }));
+
+    res.json(formatted);
+  } catch (err) {
+    res.status(500).json({ msg: "Search error" });
+  }
+});
 
 
 app.listen(3000,()=>{
