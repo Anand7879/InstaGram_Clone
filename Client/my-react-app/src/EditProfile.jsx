@@ -51,13 +51,11 @@ const EditProfile = ({ onClose }) => {
           <option>Other</option>
         </select>
 
-        {/* TOGGLE */}
         <div className="suggestion-box">
           <span>Show account suggestions on profiles</span>
           <input type="checkbox" defaultChecked />
         </div>
 
-        {/* ACTIONS */}
         <div className="edit-actions">
           <button className="submit-btn">Submit</button>
           <button className="cancel-btn" onClick={onClose}>
