@@ -17,6 +17,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/insta').then(()=>{
     console.log("DB Connected...");
     
 })
+let Story = require('./story');
 
 // app.get('/',(req,res)=>{
 //     res.send("Hello From Anand...")
@@ -510,6 +511,53 @@ app.get("/search", auth, async (req, res) => {
     res.json(formatted);
   } catch (err) {
     res.status(500).json({ msg: "Search error" });
+  }
+});
+
+app.post("/story",auth, async(req,res)=>{
+  const {mediaUrl }= req.body;
+  if(!mediaUrl){
+    return res.status(400).json({msg:"Media required"});
+  }
+   const story = new Story({
+    mediaUrl,
+    user: req.user._id,
+    expiresAt: new Date(Date.now() + 24*60*60*1000) // 24 hours from now
+   });
+
+   await story.save();
+
+   return res.status(201).json({
+    success: true,
+    message: "Story created successfully",
+    story
+   });
+});
+
+app.get("/stories", auth, async (req, res) => {
+  try {
+    const me = await User.findById(req.user._id);
+
+    if (!me) return res.json([]);
+
+    const allowedUsers = [
+      req.user._id,
+      ...me.following,
+      ...me.followers
+    ];
+
+    const stories = await Story.find({
+      user: { $in: allowedUsers },
+      expiresAt: { $gt: new Date() }
+    })
+      .populate("user", "userName")
+      .sort({ createdAt: -1 });
+
+    res.json(stories);
+
+  } catch (err) {
+    console.error("STORIES ERROR:", err);
+    res.status(500).json({ message: "Stories fetch failed" });
   }
 });
 

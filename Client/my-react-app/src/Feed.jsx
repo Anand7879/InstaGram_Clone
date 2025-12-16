@@ -8,28 +8,46 @@ const Feed = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [commentText, setCommentText] = useState("");
 
-  useEffect(() => {
-    async function fetchPosts() {
-      try {
-        const token = localStorage.getItem("token");
+    useEffect(() => {
+  async function fetchPosts() {
+    try {
+      const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:3000/posts", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const data = await res.json();
-        setPosts(data);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      } finally {
-        setLoading(false);
+      if (!token) {
+        console.error("No token found");
+        setPosts([]); // ✅ prevent crash
+        return;
       }
-    }
 
-    fetchPosts();
-  }, []);
+      const res = await fetch("http://localhost:3000/posts", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Unauthorized");
+      }
+
+      const data = await res.json();
+
+      if (Array.isArray(data)) {
+        setPosts(data);
+      } else {
+        setPosts([]); // ✅ safety
+      }
+
+    } catch (err) {
+      console.error("Fetch posts failed:", err);
+      setPosts([]); // ✅ avoid map crash
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  fetchPosts();
+}, []);
+
 
   const handleLike = async (postId) => {
     try {
@@ -117,6 +135,7 @@ const Feed = () => {
   return (
     <div className="feed">
       <div className="feed-inner">
+    
         {posts.map((post) => (
           <article key={post._id} className="post">
             {/* USERNAME HEADER */}

@@ -16,7 +16,7 @@ import React, { useState } from "react";
 import Feed from "./Feed";
 import Profile from "./Profile";
 import SearchUserRow from "./SearchUserRow"; // ⬅️ IMPORTANT
-
+import Stories from "./Stories";
 const HomePage = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [activePage, setActivePage] = useState("home");
@@ -173,9 +173,16 @@ const HomePage = () => {
 
       {/* ========== MAIN CONTENT ========== */}
       <div className="main-content">
-        {activePage === "home" && <Feed />}
-        {activePage === "profile" && <Profile />}
-      </div>
+  {activePage === "home" && (
+    <>
+      <Stories />   {/* ⭐ STORIES HERE */}
+      <Feed />
+    </>
+  )}
+
+  {activePage === "profile" && <Profile />}
+</div>
+
     </div>
   );
 };
