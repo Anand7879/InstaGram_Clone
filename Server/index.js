@@ -13,7 +13,9 @@ let User=    require('./User')
 const auth = require("./Auth");
 let Comment = require('./Comment');
 const { log } = require('console');
-mongoose.connect('mongodb://127.0.0.1:27017/insta').then(()=>{
+require('dotenv').config();
+
+mongoose.connect(process.env.MONGO_URL).then(()=>{
     console.log("DB Connected...");
     
 })
@@ -562,8 +564,8 @@ app.get("/stories", auth, async (req, res) => {
 });
 
 
-app.listen(3000,()=>{
-    console.log("Server running on port 3000");
-    
-})
+const PORT = process.env.PORT || 3000;
 
+app.listen(PORT, () => {
+  console.log("Server running on", PORT);
+});
