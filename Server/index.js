@@ -1,5 +1,5 @@
 let express = require('express')
-let bcrypt=    require('bcrypt')
+let bcrypt=    require('bcryptjs')
 let jwt=    require('jsonwebtoken')
 let mongoose = require('mongoose');
 const crypto = require('crypto');
