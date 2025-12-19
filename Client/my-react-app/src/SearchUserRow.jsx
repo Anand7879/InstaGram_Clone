@@ -7,7 +7,7 @@ const SearchUserRow = ({ user, onClick }) => {
   const toggleFollow = async () => {
     const token = localStorage.getItem("token");
 
-    await fetch(`http://localhost:3000/follow/${user._id}`, {
+    await fetch(`https://instagram1-y5ro.onrender.com/follow/${user._id}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

@@ -15,7 +15,7 @@ const Stories = () => {
   const fetchStories = async () => {
     const token = localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:3000/stories", {
+    const res = await fetch("https://instagram1-y5ro.onrender.com/stories", {
       headers: { Authorization: `Bearer ${token}` },
     });
 

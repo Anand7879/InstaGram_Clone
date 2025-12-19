@@ -19,7 +19,7 @@ const Feed = () => {
         return;
       }
 
-      const res = await fetch("http://localhost:3000/posts", {
+      const res = await fetch("https://instagram1-y5ro.onrender.com/posts", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -53,7 +53,7 @@ const Feed = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://localhost:3000/like/${postId}`, {
+      const res = await fetch(`https://instagram1-y5ro.onrender.com/like/${postId}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -95,7 +95,7 @@ const Feed = () => {
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user"));
 
-    const res = await fetch(`http://localhost:3000/comment/${postId}`, {
+    const res = await fetch(`https://instagram1-y5ro.onrender.com/comment/${postId}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

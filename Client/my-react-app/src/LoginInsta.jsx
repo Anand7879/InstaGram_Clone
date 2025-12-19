@@ -23,7 +23,7 @@ const [errorMsg, setErrorMsg] = useState("");
     try {
       console.log("DATA GOING TO BACKEND:", input);
 
-      const res = await axios.post("http://localhost:3000/login", input);
+      const res = await axios.post("https://instagram1-y5ro.onrender.com/login", input);
 
       console.log("SERVER RESPONSE →", res.data);
 

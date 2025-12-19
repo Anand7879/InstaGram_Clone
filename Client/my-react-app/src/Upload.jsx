@@ -42,7 +42,7 @@ const handleFileChange = (e) => {
       console.log('User data:', userData);
 
       let res = await axios.post(
-        "http://localhost:3000/upload",
+        "https://instagram1-y5ro.onrender.com/upload",
         {
           userName: userData.userName, 
           imgUrl: imageUrl, 

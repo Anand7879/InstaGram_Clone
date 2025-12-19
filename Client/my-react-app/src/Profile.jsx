@@ -10,7 +10,7 @@ const Profile = () => {
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:3000/me", {
+    const res = await fetch("https://instagram1-y5ro.onrender.com/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -26,7 +26,7 @@ const Profile = () => {
   const fetchUserPosts = async (userId) => {
     const token = localStorage.getItem("token");
 
-    const res = await fetch(`http://localhost:3000/user-posts/${userId}`, {
+    const res = await fetch(`https://instagram1-y5ro.onrender.com/user-posts/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

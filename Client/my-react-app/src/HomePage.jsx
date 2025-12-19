@@ -74,7 +74,7 @@ const HomePage = () => {
     const token = localStorage.getItem("token");
 
     const res = await fetch(
-      `http://localhost:3000/search?q=${value}`,
+      `https://instagram1-y5ro.onrender.com/search?q=${value}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -21,7 +21,7 @@ const SignUp = () => {
     try {
       console.log("DATA GOING TO BACKEND:", input);
 
-      const res = await axios.post("http://localhost:3000/create", input);
+      const res = await axios.post("https://instagram1-y5ro.onrender.com/create", input);
 
       console.log("SERVER RESPONSE →", res.data);
 

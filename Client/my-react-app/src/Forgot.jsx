@@ -11,7 +11,7 @@ const Forgot = () => {
     try {
       console.log("Sending reset request for:", email);
       
-      const res = await axios.post("http://localhost:3000/forgot-password", { email });
+      const res = await axios.post("https://instagram1-y5ro.onrender.com/forgot-password", { email });
       
       console.log("SERVER RESPONSE →", res.data);
       

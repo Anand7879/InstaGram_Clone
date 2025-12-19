@@ -34,7 +34,7 @@ const ResetPassword = () => {
     try {
       console.log("Resetting password with token:", token);
       
-      const res = await axios.post(`http://localhost:3000/reset-password/${token}`, {
+      const res = await axios.post(`https://instagram1-y5ro.onrender.com/reset-password/${token}`, {
         password: input.password
       });
       
